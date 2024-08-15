@@ -9,7 +9,7 @@ class GFConfig:
     vocab_size : int = 50304
     encoder_layer_n : int = 6
     attention_head_n : int = 4
-    embd_n : int = 256
+    embd_dim : int = 256
     bias : bool = False
 
 

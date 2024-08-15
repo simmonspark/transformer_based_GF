@@ -6,7 +6,9 @@ in this project the implementation is slightly different as avoiding explosive g
 
 at. Skip connection and normalization were separated.
 
-![스크린샷 2024-08-15 17-51-34](https://github.com/user-attachments/assets/dc0396fd-ee29-4354-8b1c-89f3ee70534b)
+
+![스크린샷 2024-08-15 18-10-00](https://github.com/user-attachments/assets/9d4db099-d91a-48d7-b51c-bd788bd2c183)
+
 
 
 You can download the data by going to the provided URL. in this project we are assuming it has been prepared.

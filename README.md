@@ -2,7 +2,7 @@
 transformer based QA girl friend project for my own..
 ![image](https://github.com/user-attachments/assets/8054ded3-43d3-470f-8fd6-56ba88e8a832)
 
-You can download the data by going to the provided URL. Assuming it has been prepared.
+You can download the data by going to the provided URL. in this project we are assuming it has been prepared.
 
 url as below
 

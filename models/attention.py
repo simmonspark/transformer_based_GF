@@ -14,7 +14,7 @@ class MultiHeadAttention(nn.Module):
         self.proj = nn.Linear(config.embd_dim, config.embd_dim, bias=False)
         self.att_drop = nn.Dropout(0.1)
         self.res_drop = nn.Dropout(0.1)
-        self.norm = nn.LayerNorm(config.embd_dim,bias=None)
+        self.norm = nn.LayerNorm(config.embd_dim, bias=None)
 
     def forward(self, x, attention_mask=None):
         res = x
@@ -23,14 +23,15 @@ class MultiHeadAttention(nn.Module):
 
         q, k, v = self.att_l(x).split(self.config.embd_dim, dim=2)
 
-        q = q.view(B, self.config.attention_head_n, T, C // self.config.attention_head_n)
-        k = k.view(B, self.config.attention_head_n, T, C // self.config.attention_head_n)
-        v = v.view(B, self.config.attention_head_n, T, C // self.config.attention_head_n)
+        q = q.view(B, T, self.config.attention_head_n, C // self.config.attention_head_n).transpose(1, 2)
+        k = k.view(B, T, self.config.attention_head_n, C // self.config.attention_head_n).transpose(1, 2)
+        v = v.view(B, T, self.config.attention_head_n, C // self.config.attention_head_n).transpose(1, 2)
 
         att: torch.Tensor = (q @ k.transpose(-1, -2)) / math.sqrt(C // self.config.attention_head_n)
 
         if attention_mask is not None:
-            att = att.masked_fill_(attention_mask, float("-inf"))
+            attention_mask = attention_mask.to(torch.bool)
+            att = att.masked_fill(attention_mask, float("-inf"))
 
         att = F.softmax(att, dim=-1)
         att = self.att_drop(att)

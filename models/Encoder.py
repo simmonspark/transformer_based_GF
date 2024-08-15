@@ -25,7 +25,7 @@ class MLP(nn.Module):
 
 class TransformerBlock(nn.Module):
     def __init__(self, config):
-        super.__init__()
+        super().__init__()
         self.config = config
         self.head = MLP(config)
         self.drop = nn.Dropout(0.1)

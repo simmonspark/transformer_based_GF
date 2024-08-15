@@ -11,18 +11,24 @@ class DecoderBlock(nn.Module):
         self.config = config
         self.att = MultiHeadAttention(config)
         self.transformerblock = nn.ModuleDict(dict(
-            mhe=nn.MultiheadAttention(embed_dim=config.embed_dim, num_heads=config.attention_head_n),
+            mhe=nn.MultiheadAttention(embed_dim=config.embd_dim, num_heads=config.attention_head_n),
             mlp=MLP(config),
-            ln=nn.LayerNorm(config.embed_dim),
+            ln=nn.LayerNorm(config.embd_dim),
             do=nn.Dropout(0.1),
         ))
+
 
     def forward(self, key, query, x, attention_mask=None):
         residual = x
         decoder_attention = self.att(x, attention_mask)
 
         decoder_attention = self.transformerblock.do(decoder_attention + residual)
-        mha_output, _ = self.transformerblock.mhe(query, key, decoder_attention)
+
+        '''if key.size(1) > query.size(1):
+            key = key[:, :query.size(1), :]'''
+
+
+        mha_output, _ = self.transformerblock.mhe(query, key, value=decoder_attention)
         mha_output = self.transformerblock.do(mha_output + decoder_attention)
         mha_output = self.transformerblock.ln(mha_output)
 
@@ -37,13 +43,13 @@ class DecoderBlock(nn.Module):
 class Decoder(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.embd = nn.Embedding(config.vocab_size, config.embed_dim)
+        #self.embd = nn.Embedding(config.vocab_size, config.embd_dim)
         self.posembd = PosAndWordEmbedding(config)
         self.blocks = nn.ModuleList([DecoderBlock(config) for _ in range(config.decoder_layer_n)])
         self.drop = nn.Dropout(0.1)
 
     def forward(self, x, encoder_out, mask):
-        x = self.drop(self.posembd(self.embd(x)))
+        x = self.drop(self.posembd(x))
         for block in self.blocks:
-            x = block(encoder_out, x, encoder_out, mask)
+            x = block(encoder_out, x, x, mask)
         return x

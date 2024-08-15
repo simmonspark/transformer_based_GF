@@ -48,22 +48,35 @@ class GF(nn.Module):
         return target
 
 
-if __name__ == "__main__":
-    config = GFConfig()
-    model = GF(config)
-    source = torch.randint(0, config.vocab_size, (8, 1024)).long()
-    target = torch.randint(0, config.vocab_size, (8, 1024)).long()
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters())
 
-    out = model(source, target)
-    print(out.shape)
-    criterion = nn.CrossEntropyLoss()
+print('-------------------------------')
+print('------model test activate------')
+print('-------------------------------')
 
-    out_reshaped = out.view(-1, config.vocab_size)  # (batch_size * target_len, vocab_size)
+config = GFConfig()
+model = GF(config)
+print(f'[PASSED] at. configuration test')
+source = torch.randint(0, config.vocab_size, (8, 1024)).long()
+target = torch.randint(0, config.vocab_size, (8, 1024)).long()
+print(f'[PASSED] at. generate dummy IO')
+out = model(source, target)
+print(f'[PASSED] at. test model out. shape as below')
+print(out.shape)
+criterion = nn.CrossEntropyLoss()
+
+out_reshaped = out.view(-1, config.vocab_size)  # (batch_size * target_len, vocab_size)
+
+target_reshaped = target.view(-1)  # (batch_size * target_len)
+print(f'[PASSED] at. CAL nan loss as randn IO data')
+loss = criterion(out_reshaped, target_reshaped)
+
+print("Loss:", loss.item())
+n = count_parameters(model)
+print(f'[PASSED] at. countion model params')
+print(f'params : {n:.4f}')
 
 
-    target_reshaped = target.view(-1)  # (batch_size * target_len)
 
 
-    loss = criterion(out_reshaped, target_reshaped)
-
-    print("Loss:", loss.item())

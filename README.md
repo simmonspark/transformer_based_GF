@@ -1,5 +1,6 @@
 # transformer_based_GF
-transformer based QA girl friend project for my own..
+# 시언이의 두근두근 챗봇 만들기 from scratch
+transformer based QA friend project for my own..
 ![image](https://github.com/user-attachments/assets/8054ded3-43d3-470f-8fd6-56ba88e8a832)
 
 in this project the implementation is slightly different as avoiding explosive gradient & not using lr warmup decay
@@ -15,8 +16,8 @@ You can download the data by going to the provided URL. in this project we are a
 
 url as below
 
-https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71633
+[https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71633](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&aihubDataSe=data&dataSetSn=543)
 
 
-![스크린샷 2024-08-15 17-51-34](https://github.com/user-attachments/assets/5ec7395b-9b46-4e3b-bbdd-89792182d947)
+![image](https://github.com/user-attachments/assets/101371eb-7d35-4751-9dba-bbfe4c65e262)
 

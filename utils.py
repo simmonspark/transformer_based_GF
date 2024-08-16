@@ -5,6 +5,7 @@ from datasets import Dataset
 from tqdm import tqdm
 from tokenizers import Tokenizer
 from dataset import GFDataset
+from torch.utils.data import DataLoader
 
 tokenizer_path = "korean_tokenizer.json"
 tokenizer = Tokenizer.from_file(tokenizer_path)
@@ -70,7 +71,6 @@ def PrepareData(data_path=data_dir):
     flatten_label = [item for sublist in dataset['label'] for item in sublist]
     dataset = dict(input_data=flatten_input, label=flatten_label)
 
-
     return dataset
 
 
@@ -125,7 +125,11 @@ if __name__ == "__main__":
     print()
     # t_data = PrepareToknizingData()
     dataset = GFDataset(data)
-    x,y,a = next(iter(dataset))
+    x, y, a = next(iter(dataset))
     print()
     # flatten_input = [item for sublist in data['input_data'] for item in sublist]
     # flatten_label = [item for sublist in data['label'] for item in sublist]
+    test_loader = DataLoader(dataset, batch_size=8, pin_memory=True, pin_memory_device='cuda')
+    while True:
+        next(iter(test_loader))
+        print('test call [PASS]')

@@ -57,4 +57,5 @@ My Hardware
 
 ![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/2d7f4f9a-c266-4640-8229-c57d73afb72b)
 
-![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/992931ed-9191-4b0e-902d-8597aecb296b)
+
+![스크린샷 2024-08-17 13-27-29](https://github.com/user-attachments/assets/4f4ee03f-e6d4-451c-80ca-3b7745b413cb)

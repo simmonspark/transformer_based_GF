@@ -47,6 +47,7 @@ Ram : 27G at preprocessing. in train process, sampling at getitem(20G)
 - bit operation : 16bit
 - grad accumulation : No
 - PARAM : 54M
+- 수정중.. embedding depth 관련한 수정사항 256 to 768
 
 ### at batch per Vram
 

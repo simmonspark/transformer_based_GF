@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from Encoder import Encoder
-from decoder import Decoder
-from config import GFConfig
+from models.Encoder import Encoder
+from models.decoder import Decoder
+from models.config import GFConfig
 
 
 class GF(nn.Module):

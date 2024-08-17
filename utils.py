@@ -69,9 +69,10 @@ def PrepareData(data_path=data_dir):
     dataset = Dataset.from_list(input_data)
     flatten_input = [item for sublist in dataset['input_data'] for item in sublist]
     flatten_label = [item for sublist in dataset['label'] for item in sublist]
-    dataset = dict(input_data=flatten_input, label=flatten_label)
+    dataset_train = dict(input_data=flatten_input[0:90000], label=flatten_label[0:90000])
+    dataset_val = dict(input_data=flatten_input[90000:], label=flatten_label[90000:])
 
-    return dataset
+    return dataset_train, dataset_val
 
 
 def PrepareToknizingData(data_path=data_dir):
@@ -120,11 +121,11 @@ def PrepareToknizingData(data_path=data_dir):
 
 
 if __name__ == "__main__":
-    data = PrepareData()
+    train_data, val_data = PrepareData()
 
     print()
     # t_data = PrepareToknizingData()
-    dataset = GFDataset(data)
+    dataset = GFDataset(train_data)
     x, y, a = next(iter(dataset))
     print()
     # flatten_input = [item for sublist in data['input_data'] for item in sublist]

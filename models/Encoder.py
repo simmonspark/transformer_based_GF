@@ -1,7 +1,7 @@
 import torch.nn as nn
 import copy
-from attention import MultiHeadAttention
-from embedding import PosAndWordEmbedding
+from models.attention import MultiHeadAttention
+from models.embedding import PosAndWordEmbedding
 import torch.nn.functional as F
 import torch
 

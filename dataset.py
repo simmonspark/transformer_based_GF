@@ -34,4 +34,4 @@ class GFDataset(Dataset):
         return torch.Tensor(input_data).type(torch.int), torch.Tensor(label).type(torch.int), torch.Tensor(att_mask).type(torch.int)
 
     def __len__(self):
-        return len(self.data_dic)
+        return len(self.data_dic['input_data'])

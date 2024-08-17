@@ -27,11 +27,14 @@ class MultiHeadAttention(nn.Module):
         k = k.view(B, T, self.config.attention_head_n, C // self.config.attention_head_n).transpose(1, 2)
         v = v.view(B, T, self.config.attention_head_n, C // self.config.attention_head_n).transpose(1, 2)
 
-        att: torch.Tensor = (q @ k.transpose(-1, -2)) / math.sqrt(C // self.config.attention_head_n)
+        att: torch.Tensor = (q @ k.transpose(-1,-2)) / math.sqrt(C // self.config.attention_head_n)
 
         if attention_mask is not None:
+            # Expand attention_mask to match the shape of att
+            attention_mask = attention_mask.unsqueeze(1).unsqueeze(2)  # Shape: (batch_size, 1, 1, seq_length)
             attention_mask = attention_mask.to(torch.bool)
-            att = att.masked_fill(attention_mask, float("-inf"))
+            # Broadcast attention_mask to shape of att
+            att = att.masked_fill(~attention_mask, float("-inf"))
 
         att = F.softmax(att, dim=-1)
         att = self.att_drop(att)

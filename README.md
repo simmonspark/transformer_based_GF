@@ -1,6 +1,10 @@
-# transformer_based_GF
-# 시언이의 두근두근 챗봇 만들기 from scratch
+# transformer_based_QA friend
+## 시언이의 두근두근 챗봇 만들기 from scratch
 transformer based QA friend project for my own..
+
+!! Due to problems with triangular matrix implementation, a multihead attention module was used in the decoder part.
+Of course, there is also multihead attention implemented by scratch, but it is only used in the encoder.
+
 ![image](https://github.com/user-attachments/assets/8054ded3-43d3-470f-8fd6-56ba88e8a832)
 
 in this project the implementation is slightly different as avoiding explosive gradient & not using lr warmup decay
@@ -21,3 +25,37 @@ url as below
 
 ![image](https://github.com/user-attachments/assets/101371eb-7d35-4751-9dba-bbfe4c65e262)
 
+
+
+### Hardware limitations as follow
+
+Vram : 10G
+Ram : 27G at preprocessing. in train process, sampling at getitem(20G)
+
+### model config
+
+- n_encoder : 6
+- n_decoder : 6
+- n_attention_head : 4
+- embedding depth : 256
+- max token sequence : 1024
+- batch : 18
+- bit operation : 16bit
+- grad accumulation : No
+- PARAM : 54M
+
+### at batch per Vram
+
+- 6 -> 8G
+- 12 -> 16G
+- 18 -> 23.xx G
+
+My Hardware
+- Ram : 64G
+- graphic : 4090 24G
+- cpu : i7-12700K
+
+![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/2d7f4f9a-c266-4640-8229-c57d73afb72b)
+
+
+![스크린샷 2024-08-17 13-27-29](https://github.com/user-attachments/assets/4f4ee03f-e6d4-451c-80ca-3b7745b413cb)

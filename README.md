@@ -3,6 +3,7 @@
 transformer based QA friend project for my own..
 
 !! Due to problems with triangular matrix implementation, a multihead attention module was used in the decoder part.
+Of course, there is also multihead attention implemented by scratch, but it is only used in the encoder.
 
 ![image](https://github.com/user-attachments/assets/8054ded3-43d3-470f-8fd6-56ba88e8a832)
 

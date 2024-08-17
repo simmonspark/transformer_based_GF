@@ -1,5 +1,5 @@
 # transformer_based_GF
-# 시언이의 두근두근 챗봇 만들기 from scratch
+## 시언이의 두근두근 챗봇 만들기 from scratch
 transformer based QA friend project for my own..
 ![image](https://github.com/user-attachments/assets/8054ded3-43d3-470f-8fd6-56ba88e8a832)
 
@@ -21,3 +21,33 @@ url as below
 
 ![image](https://github.com/user-attachments/assets/101371eb-7d35-4751-9dba-bbfe4c65e262)
 
+![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/992931ed-9191-4b0e-902d-8597aecb296b)
+
+
+
+### Hardware limitations as follow
+
+Vram : 10G
+Ram : 27G at preprocessing. in train process, sampling at getitem(20G)
+
+### model config
+
+- n_encoder : 6
+- n_decoder : 6
+- n_attention_head : 4
+- embedding depth : 256
+- max token sequence : 1024
+- batch : 18
+- bit operation : 16bit
+- grad accumulation : No
+
+### at batch per Vram
+
+- 6 -> 8G
+- 12 -> 16G
+- 18 -> 23.xx G
+
+My Hardware
+- Ram : 64G
+- graphic : 4090 24G
+- cpu : i7-12700K

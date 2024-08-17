@@ -1,5 +1,5 @@
 # transformer_based_QA friend
-## 시언이의 두근두근 챗봇 만들기 from scratch
+## 챗봇 만들기 from scratch
 transformer based QA friend project for my own.
 
 !!note!! 4090 4way 정도의 컴퓨팅 파워와 충분한 전력이 갖춰지지 않은 상태에서는 scratch로 학습하는 것 보단, T5 pretrain model로 transfer learning 지키는 것이 결과를 확인하는데 좋을겁니다.

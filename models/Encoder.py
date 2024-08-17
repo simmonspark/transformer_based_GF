@@ -10,9 +10,9 @@ class MLP(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        self.c_fc = nn.Linear(config.embd_dim, 4 * config.embd_dim, bias=False)
+        self.c_fc = nn.Linear(config.embd_dim, 2 * config.embd_dim, bias=False)
         self.gelu = nn.GELU()
-        self.c_proj = nn.Linear(4 * config.embd_dim, config.embd_dim, bias=False)
+        self.c_proj = nn.Linear(2 * config.embd_dim, config.embd_dim, bias=False)
         self.dropout = nn.Dropout(0.1)
 
     def forward(self, x):
@@ -30,7 +30,7 @@ class TransformerBlock(nn.Module):
         self.head = MLP(config)
         self.drop = nn.Dropout(0.1)
         self.att_l = MultiHeadAttention(config)
-        self.norm = nn.LayerNorm(config.embd_dim, bias = None)
+        self.norm = nn.LayerNorm(config.embd_dim, bias = False)
 
     def forward(self, x, attention_mask=None):
         x = self.att_l(x, attention_mask)

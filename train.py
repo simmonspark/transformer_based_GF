@@ -11,11 +11,11 @@ import torch.nn as nn
 from transformers import  T5ForConditionalGeneration
 
 IsComplie = False
-mode = 'scratch'  # scratch, resume, fine, fine_resume
-lr = 1e-6
+mode = 'fine_resume'  # scratch, resume, fine, fine_resume
+lr = 3e-4
 betas = (0.9, 0.95)
 epoch = 100
-batch_size = 8
+batch_size = 4
 
 criterion = nn.CrossEntropyLoss()
 cfg = GFConfig()
@@ -27,7 +27,7 @@ spetial_tokens = ['[START],[UNK],[EOS]']
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
-torch.manual_seed(9434)
+torch.manual_seed(1234)
 
 print('======================================')
 print('       시언이의 챗봇 train process      ')
@@ -101,10 +101,10 @@ def cal_loss():
         att_mask = att_mask.to('cuda')
         with torch.cuda.amp.autocast(enabled=True):
             if mode.startswith('fine'):
-                pred = model(x, y, att_mask)
+                pred = model(input_ids=x, labels=y, attention_mask=att_mask)
                 loss = pred.loss
             else :
-                pred = model(x, y, att_mask)
+                pred = model(x, y)
                 pred = pred.view(-1, cfg.vocab_size)
                 y = y.view(-1)
                 loss = criterion(pred, y)
@@ -126,16 +126,18 @@ for iter in range(epoch):
         att_mask = att_mask.to('cuda')
         optimizer.zero_grad()
         with torch.cuda.amp.autocast(enabled=True):
-            pred = model(x, y, att_mask)
+
             if mode.startswith('fine'):
+                pred = model(input_ids=x, labels=y, attention_mask=att_mask)
                 loss = pred.loss
             else :
+                pred = model(x, y, att_mask)
                 pred = pred.view(-1, cfg.vocab_size)
                 y = y.view(-1)
                 loss = criterion(pred, y)
             scaler.scale(loss).backward()
             scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         scaler.step(optimizer)
         scaler.update()
 

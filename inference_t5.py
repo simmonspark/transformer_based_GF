@@ -27,18 +27,18 @@ train_ds = GFDataset(train_data)
 val_ds = GFDataset(val_data)
 
 train_loader = DataLoader(train_ds, batch_size=4, pin_memory=True, num_workers=3,shuffle=True)
-val_loader = DataLoader(val_ds, batch_size=4, pin_memory=True, num_workers=3)
+val_loader = DataLoader(val_ds, batch_size=4, pin_memory=True, num_workers=3,shuffle=True)
 
 
 def test_model():
     results = []
-    x, y, mask = next(iter(train_loader))
+    x, y, mask = next(iter(val_loader))
     x = x.to('cuda')
     y = y.to(torch.long).to('cuda')
     att_mask = mask.to('cuda')
 
-    with torch.cuda.amp.autocast(enabled=True):
-        outputs = model.generate(input_ids=x)
+
+    outputs = model.generate(input_ids=x, attention_mask=att_mask)
 
     for _ in range(4):
         input_token = tokenizer.decode(x[_].tolist(), skip_special_tokens=True)

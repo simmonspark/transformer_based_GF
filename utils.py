@@ -60,17 +60,17 @@ def PrepareData(data_path=data_dir):
         except Exception as e:
             print(f'\n[ERROR] 파일 처리 중 오류 발생: {path} - {e}\n')
     test_data = input_data[0]
-    for i in range(len(test_data['input_data'])):
+    '''for i in range(len(test_data['input_data'])):
         print(test_data['input_data'][i])
         print('\n')
         print(test_data['label'][i])
         print('\n')
-    print('QA test 출력입니다.\n')
+    print('QA test 출력입니다.\n')'''
     dataset = Dataset.from_list(input_data)
     flatten_input = [item for sublist in dataset['input_data'] for item in sublist]
     flatten_label = [item for sublist in dataset['label'] for item in sublist]
-    dataset_train = dict(input_data=flatten_input[0:500], label=flatten_label[0:500])
-    dataset_val = dict(input_data=flatten_input[500:550], label=flatten_label[500:550])
+    dataset_train = dict(input_data=flatten_input[:500], label=flatten_label[:500])
+    dataset_val = dict(input_data=flatten_input[550:600], label=flatten_label[550:600])
 
     return dataset_train, dataset_val
 

@@ -32,8 +32,12 @@ class MultiHeadAttention(nn.Module):
         if attention_mask is not None:
             # Expand attention_mask to match the shape of att
             attention_mask = attention_mask.unsqueeze(1).unsqueeze(2)  # Shape: (batch_size, 1, 1, seq_length)
+
+            # Ensure attention_mask is in the correct dtype
             attention_mask = attention_mask.to(torch.bool)
-            # Broadcast attention_mask to shape of att
+
+            # Apply the mask
+            # Note: ~attention_mask inverts the mask, so only positions with False in attention_mask get -inf
             att = att.masked_fill(~attention_mask, float("-inf"))
 
         att = F.softmax(att, dim=-1)

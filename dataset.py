@@ -4,6 +4,7 @@ from tokenizers import Tokenizer
 from transformers import AutoTokenizer
 tokenizer_path = "korean_tokenizer.json"
 tokenizer = Tokenizer.from_file(tokenizer_path)
+
 max_length = 1024
 
 
@@ -32,7 +33,7 @@ class GFDataset(Dataset):
 
         label = add_padding(label.ids)
 
-        return torch.Tensor(input_data).type(torch.int), torch.Tensor(label).type(torch.int), torch.Tensor(att_mask).type(torch.int)
+        return torch.Tensor(input_data).type(torch.int), torch.Tensor(label).type(torch.int), torch.Tensor(att_mask).type(torch.bool)
 
     def __len__(self):
         return len(self.data_dic['input_data'])

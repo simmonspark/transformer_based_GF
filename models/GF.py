@@ -18,17 +18,24 @@ class GF(nn.Module):
         self.fc_out = nn.Linear(config.embd_dim, config.vocab_size)
 
     def make_trg_mask(self, trg):
-        batch_size, trg_len = trg.shape
-        trg_mask = torch.tril(torch.ones((trg_len, trg_len))).expand(
-            batch_size, 1, trg_len, trg_len
-        )
+        # Check the dimensions of trg
+        if trg.dim() == 3:
+            batch_size, trg_len, _ = trg.shape
+        elif trg.dim() == 2:
+            batch_size, trg_len = trg.shape
+        else:
+            raise ValueError("Unexpected shape of trg")
+
+        # Lower triangular matrix (tril) to mask future tokens
+        trg_mask = torch.tril(torch.ones((trg_len, trg_len), device=trg.device)).bool()
+        trg_mask = trg_mask.unsqueeze(0).repeat(batch_size * 4, 1, 1)
         return trg_mask
 
     def forward(self, source, target, attention_mask=None):
         trg_mask = self.make_trg_mask(target)
         enc_out = self.encoder(source, attention_mask)
-        outputs = self.decoder(target, enc_out, trg_mask)
-        output = F.softmax(self.fc_out(outputs), dim=-1)
+        outputs = self.decoder(target, enc_out, trg_mask = trg_mask, satt_mask= attention_mask)
+        output = self.fc_out(outputs)
         return output
 
     def generate_tokens(self, source, max_tokens, device):
@@ -59,8 +66,9 @@ print('-------------------------------\n')
 config = GFConfig()
 model = GF(config)
 print(f'[PASSED] at. configuration test\n')
-source = torch.randint(0, config.vocab_size, (8, 1024)).long()
-target = torch.randint(0, config.vocab_size, (8, 1024)).long()
+source = torch.randint(0, config.vocab_size, (8, 256)).long()
+target = torch.randint(0, config.vocab_size, (8, 256)).long()
+
 print(f'[PASSED] at. generate dummy IO\n')
 out = model(source, target)
 print(f'[PASSED] at. test model out. shape as below\n')
@@ -80,9 +88,4 @@ n = count_parameters(model)
 print(f'[PASSED] at. countion model params\n')
 print(f'params : {n / 1_000_000:.4f}M')
 print('\n짝짝짝~ 모든 필수 assertion 테스트를 통과했어요~\n')
-print('\n모델 고속 컴파일...\n')
-model = torch.compile(model)
-print('\nDONE\n')
-print('data preprocessing 프로세스가 작동합니다.')
-print('...시간이 좀 걸려요...\n')
 

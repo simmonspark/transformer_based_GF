@@ -64,3 +64,11 @@ My Hardware
 
 
 ![스크린샷 2024-08-17 13-27-29](https://github.com/user-attachments/assets/4f4ee03f-e6d4-451c-80ca-3b7745b413cb)
+
+
+## HOW to inference
+1. 가라 test
+   : dataset에서 sampling 해서 테스트 하는데 이건 한국어에서 영어 번역 시험에서 정답지를 힐끔힐끔 보면서 하는 느낌
+2. Autoregressive method (구현중)
+   : next token generation이랑 상당히 비슷한데 t+1 sequence generation에서 target은 0~t가 된다.
+

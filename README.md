@@ -40,6 +40,7 @@ Ram : 27G at preprocessing. in train process, sampling at getitem(20G)
 - batch : 18
 - bit operation : 16bit
 - grad accumulation : No
+- PARAM : 54M
 
 ### at batch per Vram
 

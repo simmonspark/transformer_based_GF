@@ -25,8 +25,6 @@ url as below
 
 ![image](https://github.com/user-attachments/assets/101371eb-7d35-4751-9dba-bbfe4c65e262)
 
-![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/992931ed-9191-4b0e-902d-8597aecb296b)
-
 
 
 ### Hardware limitations as follow
@@ -56,3 +54,7 @@ My Hardware
 - Ram : 64G
 - graphic : 4090 24G
 - cpu : i7-12700K
+
+![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/2d7f4f9a-c266-4640-8229-c57d73afb72b)
+
+![스크린샷 2024-08-17 13-13-57](https://github.com/user-attachments/assets/992931ed-9191-4b0e-902d-8597aecb296b)

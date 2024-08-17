@@ -1,6 +1,10 @@
 # transformer_based_QA friend
-## 시언이의 두근두근 챗봇 만들기 from scratch
-transformer based QA friend project for my own..
+## 챗봇 만들기 from scratch
+transformer based QA friend project for my own.
+
+!!note!! 4090 4way 정도의 컴퓨팅 파워와 충분한 전력이 갖춰지지 않은 상태에서는 scratch로 학습하는 것 보단, T5 pretrain model로 transfer learning 지키는 것이 결과를 확인하는데 좋을겁니다.
+
+!!note!! In situations where 4090 4way computing power and sufficient power are not available, it is recommended to use transfer learning with a T5 pretrain model to check the results rather than learning from scratch.
 
 !! Due to problems with triangular matrix implementation, a multihead attention module was used in the decoder part.
 Of course, there is also multihead attention implemented by scratch, but it is only used in the encoder.
@@ -43,6 +47,7 @@ Ram : 27G at preprocessing. in train process, sampling at getitem(20G)
 - bit operation : 16bit
 - grad accumulation : No
 - PARAM : 54M
+- 수정중.. embedding depth 관련한 수정사항 256 to 768
 
 ### at batch per Vram
 
@@ -59,3 +64,13 @@ My Hardware
 
 
 ![스크린샷 2024-08-17 13-27-29](https://github.com/user-attachments/assets/4f4ee03f-e6d4-451c-80ca-3b7745b413cb)
+
+
+## HOW to inference
+1. 가라 test
+   : dataset에서 sampling 해서 테스트 하는데 이건 한국어에서 영어 번역 시험에서 정답지를 힐끔힐끔 보면서 하는 느낌
+   ![image](https://github.com/user-attachments/assets/af24e04c-343f-4e93-b646-aea105bb3916)
+
+3. Autoregressive method (구현중)
+   : next token generation이랑 상당히 비슷한데 t+1 sequence generation에서 target은 0~t가 된다.
+

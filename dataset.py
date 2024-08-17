@@ -1,10 +1,11 @@
 from torch.utils.data import Dataset
 import torch
 from tokenizers import Tokenizer
-
+from transformers import AutoTokenizer
 tokenizer_path = "korean_tokenizer.json"
 tokenizer = Tokenizer.from_file(tokenizer_path)
 max_length = 1024
+
 
 
 def add_padding(ids, max_length=max_length, pad_id=0):

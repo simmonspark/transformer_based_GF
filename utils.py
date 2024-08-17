@@ -49,7 +49,7 @@ def PrepareData(data_path=data_dir):
                         tmp = []
                         for dialogue in M['annotations']['lines']:
                             # tmp.append(dialogue['norm_text'])
-                            text = '[START]' + dialogue['norm_text'] + '[EOS]'
+                            text = dialogue['norm_text']
                             tmp.append(text)
                             label = tmp
 
@@ -69,8 +69,8 @@ def PrepareData(data_path=data_dir):
     dataset = Dataset.from_list(input_data)
     flatten_input = [item for sublist in dataset['input_data'] for item in sublist]
     flatten_label = [item for sublist in dataset['label'] for item in sublist]
-    dataset_train = dict(input_data=flatten_input[0:90000], label=flatten_label[0:90000])
-    dataset_val = dict(input_data=flatten_input[90000:], label=flatten_label[90000:])
+    dataset_train = dict(input_data=flatten_input[0:500], label=flatten_label[0:500])
+    dataset_val = dict(input_data=flatten_input[500:550], label=flatten_label[500:550])
 
     return dataset_train, dataset_val
 

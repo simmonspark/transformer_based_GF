@@ -12,5 +12,5 @@ class GFConfig:
     encoder_layer_n: int = 6
     attention_head_n: int = 4
     decoder_layer_n: int = 6
-    embd_dim: int = 256
+    embd_dim: int = 768
     bias: bool = False

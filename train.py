@@ -11,7 +11,7 @@ import torch.nn as nn
 from transformers import  T5ForConditionalGeneration
 
 IsComplie = False
-mode = 'fine'  # scratch, resume, fine
+mode = 'scratch'  # scratch, resume, fine, fine_resume
 lr = 1e-6
 betas = (0.9, 0.95)
 epoch = 100
@@ -100,11 +100,14 @@ def cal_loss():
         y = y.to(torch.long).to('cuda')
         att_mask = att_mask.to('cuda')
         with torch.cuda.amp.autocast(enabled=True):
-            pred = model(input_ids=x, labels=y, attention_mask=att_mask)
-            '''pred = pred.view(-1, cfg.vocab_size)
-            y = y.view(-1)
-            loss = criterion(pred, y)'''
-            loss = pred.loss
+            if mode.startswith('fine'):
+                pred = model(x, y, att_mask)
+                loss = pred.loss
+            else :
+                pred = model(x, y, att_mask)
+                pred = pred.view(-1, cfg.vocab_size)
+                y = y.view(-1)
+                loss = criterion(pred, y)
         losses.append(loss)
     model.train()
     print(f'val loss : {sum(losses) / len(losses)}')
@@ -123,8 +126,8 @@ for iter in range(epoch):
         att_mask = att_mask.to('cuda')
         optimizer.zero_grad()
         with torch.cuda.amp.autocast(enabled=True):
-            pred = model(input_ids=x, labels=y)
-            if mode == 'fine':
+            pred = model(x, y, att_mask)
+            if mode.startswith('fine'):
                 loss = pred.loss
             else :
                 pred = pred.view(-1, cfg.vocab_size)

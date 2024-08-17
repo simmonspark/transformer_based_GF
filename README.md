@@ -70,6 +70,8 @@ My Hardware
 1. 가라 test
    : dataset에서 sampling 해서 테스트 하는데 이건 한국어에서 영어 번역 시험에서 정답지를 힐끔힐끔 보면서 하는 느낌
    ![image](https://github.com/user-attachments/assets/af24e04c-343f-4e93-b646-aea105bb3916)
+   ![image](https://github.com/user-attachments/assets/68839959-02e1-4087-bbc4-e2cefd82fddb)
+
 
 3. Autoregressive method (구현중)
    : next token generation이랑 상당히 비슷한데 t+1 sequence generation에서 target은 0~t가 된다.

@@ -22,29 +22,29 @@ class DecoderBlock(nn.Module):
         residual = x
         assert trg_mask is not None
 
-        # Self-Attention
         x = x.transpose(0, 1)
-        decoder_attention, _ = self.att(x, x, x)
+        decoder_attention, _ = self.att(x, x, x, attn_mask=~trg_mask)
         decoder_attention = decoder_attention.transpose(0, 1)
 
-        # Apply Dropout and Add & Norm
         decoder_attention = self.transformerblock.do(decoder_attention + residual)
-        decoder_attention = self.transformerblock.ln1(decoder_attention)  # First LayerNorm
+        decoder_attention = self.transformerblock.ln1(decoder_attention)
 
-        # Cross-Attention with Key Padding Mask
-        if key_padding_mask is not None:
-            key_padding_mask = key_padding_mask.transpose(0, 1)
-        mha_output, _ = self.transformerblock.mhe(query, key, value=decoder_attention)
+        query = query.transpose(0, 1)
+        key = key.transpose(0, 1)
+        decoder_attention = decoder_attention.transpose(0, 1)
 
-        # Apply Dropout and Add & Norm
-        mha_output = self.transformerblock.do(mha_output + decoder_attention)
-        mha_output = self.transformerblock.ln2(mha_output)  # Second LayerNorm
+        mha_output, _ = self.transformerblock.mhe(query, key, value=decoder_attention,
+                                                  key_padding_mask=key_padding_mask)
 
-        # MLP and Final Add & Norm
+        mha_output = mha_output.transpose(0, 1)
+
+        mha_output = self.transformerblock.do(mha_output + decoder_attention.transpose(0, 1))
+        mha_output = self.transformerblock.ln2(mha_output)
+
         res = mha_output
         decoder_attention_output = self.transformerblock.mlp(mha_output)
         decoder_attention_output = self.transformerblock.do(decoder_attention_output + res)
-        decoder_attention_output = self.transformerblock.ln2(decoder_attention_output)  # Reuse the same LayerNorm
+        decoder_attention_output = self.transformerblock.ln2(decoder_attention_output)
 
         return decoder_attention_output
 
@@ -52,7 +52,7 @@ class DecoderBlock(nn.Module):
 class Decoder(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # self.embd = nn.Embedding(config.vocab_size, config.embd_dim)
+
         self.posembd = PosAndWordEmbedding(config)
         self.blocks = nn.ModuleList([DecoderBlock(config) for _ in range(config.decoder_layer_n)])
         self.drop = nn.Dropout(0.1)

@@ -29,11 +29,13 @@ class TransformerBlock(nn.Module):
         self.config = config
         self.head = MLP(config)
         self.drop = nn.Dropout(0.1)
-        self.att_l = MultiHeadAttention(config)
+        self.att = nn.MultiheadAttention(768, 4)
         self.norm = nn.LayerNorm(config.embd_dim, bias = False)
 
     def forward(self, x, attention_mask=None):
-        x = self.att_l(x, attention_mask)
+        x = x.transpose(0,1)
+        x, _ = self.att(x,x,x, key_padding_mask = attention_mask)
+        x = x.transpose(0,1)
         res = x
         x = self.head(x)
         x = res + x

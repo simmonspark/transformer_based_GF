@@ -69,8 +69,8 @@ def PrepareData(data_path=data_dir):
     dataset = Dataset.from_list(input_data)
     flatten_input = [item for sublist in dataset['input_data'] for item in sublist]
     flatten_label = [item for sublist in dataset['label'] for item in sublist]
-    dataset_train = dict(input_data=flatten_input[:500], label=flatten_label[:500])
-    dataset_val = dict(input_data=flatten_input[550:600], label=flatten_label[550:600])
+    dataset_train = dict(input_data=flatten_input[:1000], label=flatten_label[:1000])
+    dataset_val = dict(input_data=flatten_input[1000:1100], label=flatten_label[1000:1100])
 
     return dataset_train, dataset_val
 

@@ -9,7 +9,7 @@ max_length = 1024
 
 
 
-def add_padding(ids, max_length=max_length, pad_id=0):
+def add_padding(ids, max_length=max_length, pad_id=3):
     if len(ids) < max_length:
         return ids + [pad_id] * (max_length - len(ids))
     return ids[:max_length]
@@ -25,7 +25,8 @@ class GFDataset(Dataset):
 
         input_data = tokenizer.encode(input_data)
 
-        att_mask = add_padding(input_data.attention_mask)
+        att_mask = add_padding([0]*len(input_data.ids),pad_id=1)
+
 
         input_data = add_padding(input_data.ids)
 

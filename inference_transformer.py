@@ -28,15 +28,15 @@ train_data, val_data = PrepareData()
 train_ds = GFDataset(train_data)
 val_ds = GFDataset(val_data)
 
-batch_size = 4
+batch_size = 8
 
 
-train_loader = DataLoader(train_ds, batch_size=batch_size, pin_memory=True, num_workers=3, shuffle=True)
-val_loader = DataLoader(val_ds, batch_size=batch_size, pin_memory=True, num_workers=3,shuffle=True)
+train_loader = DataLoader(train_ds, batch_size=batch_size, pin_memory=True, num_workers=3)
+val_loader = DataLoader(val_ds, batch_size=batch_size, pin_memory=True, num_workers=3, shuffle=True)
 with torch.no_grad():
     source, target, attention_mask = next(iter(val_loader))
     input_token = source
-    output_logits = model(source.to('cuda'), target.to('cuda'), attention_mask.to('cuda'))
+    output_logits = model(source=source.to('cuda'),target= target.to('cuda'),attention_mask= attention_mask.to('cuda'))
 
     predicted_sequence = torch.argmax(output_logits, dim=-1)
 
@@ -45,8 +45,8 @@ with torch.no_grad():
         decoded_pred = tokenizer.decode(predicted_sequence[_].tolist(), skip_special_tokens=True)
         decoded_string = tokenizer.decode(target[_].tolist(), skip_special_tokens=True)
         print(f'입력은 다음과 같습니다. --> {decoded_source}')
-        print(f'대답은 다음과 같습니다. --> {decoded_pred}')
-        print(f'정답은 다음과 같습니다. --> {decoded_string}')
+        print(f'대답은 다음과 같습니다. --> {decoded_pred}\n')
+        #print(f'정답은 다음과 같습니다. --> {decoded_string}')
 
 
 

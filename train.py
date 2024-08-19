@@ -11,11 +11,11 @@ import torch.nn as nn
 from transformers import  T5ForConditionalGeneration
 
 IsComplie = False
-mode = 'fine_resume'  # scratch, resume, fine, fine_resume
-lr = 3e-4
+mode = 'resume'  # scratch, resume, fine, fine_resume
+lr = 1e-4
 betas = (0.9, 0.95)
 epoch = 100
-batch_size = 4
+batch_size = 8
 
 criterion = nn.CrossEntropyLoss()
 cfg = GFConfig()

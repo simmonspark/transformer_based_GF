@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from models.Encoder import Encoder
 from models.decoder import Decoder
 from models.config import GFConfig
-
+import torch
 
 class GF(nn.Module):
 
@@ -20,15 +20,14 @@ class GF(nn.Module):
     def make_trg_mask(self, trg):
         # Check the dimensions of trg
         if trg.dim() == 3:
-            batch_size, trg_len, _ = trg.shape
+            _, trg_len, _ = trg.shape
         elif trg.dim() == 2:
-            batch_size, trg_len = trg.shape
+            trg_len = trg.shape[1]
         else:
             raise ValueError("Unexpected shape of trg")
 
         # Lower triangular matrix (tril) to mask future tokens
         trg_mask = torch.tril(torch.ones((trg_len, trg_len), device=trg.device)).bool()
-        trg_mask = trg_mask.unsqueeze(0).repeat(batch_size * 4, 1, 1)
         return trg_mask
 
     def forward(self, source, target, attention_mask=None):

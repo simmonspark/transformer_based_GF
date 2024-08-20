@@ -12,10 +12,7 @@ tokenizer = Tokenizer.from_file(tokenizer_path)
 max_length = 1024
 
 
-def add_padding(ids, max_length=max_length, pad_id=0):
-    if len(ids) < max_length:
-        return ids + [pad_id] * (max_length - len(ids))
-    return ids[:max_length]
+
 
 
 '''
@@ -49,7 +46,7 @@ def PrepareData(data_path=data_dir):
                         tmp = []
                         for dialogue in M['annotations']['lines']:
                             # tmp.append(dialogue['norm_text'])
-                            text = dialogue['norm_text']
+                            text = '[START]' + dialogue['norm_text'] + '[EOS]'
                             tmp.append(text)
                             label = tmp
 
@@ -69,13 +66,13 @@ def PrepareData(data_path=data_dir):
     dataset = Dataset.from_list(input_data)
     flatten_input = [item for sublist in dataset['input_data'] for item in sublist]
     flatten_label = [item for sublist in dataset['label'] for item in sublist]
-    dataset_train = dict(input_data=flatten_input[:1000], label=flatten_label[:1000])
-    dataset_val = dict(input_data=flatten_input[1000:1100], label=flatten_label[1000:1100])
+    dataset_train = dict(input_data=flatten_input[:30000], label=flatten_label[:30000])
+    dataset_val = dict(input_data=flatten_input[30000:31000], label=flatten_label[30000:31000])
 
     return dataset_train, dataset_val
 
 
-def PrepareToknizingData(data_path=data_dir):
+def ToknizerTrainData(data_path=data_dir):
     full_path = []
     for dir, _, path in tqdm(os.walk(data_dir), desc='Collection data path'):
         for name in path:
@@ -85,39 +82,19 @@ def PrepareToknizingData(data_path=data_dir):
     input_data = []
     error_files = []
     for path in tqdm(full_path, desc='Processing raw Json as input'):
-
         try:
             with open(path, 'r', encoding='utf-8') as file:
                 raw_json = json.load(file)
                 for M in raw_json['info']:
                     if M['category'] in sub_categories:
-                        tmp = []
-                        att_tmp = []
                         for dialogue in M['annotations']['lines']:
                             # tmp.append(dialogue['norm_text'])
                             text = '[START]' + dialogue['norm_text'] + '[EOS]'
-                            text = tokenizer.encode(text)
-                            att_mask = text.attention_mask
-                            att_mask = add_padding(att_mask)
-                            att_tmp.append(att_mask)
-                            text = add_padding(text.ids)
-                            tmp.append(text)
-                            label = tmp
-
-                        input_data.append({'input_data': tmp[:-1], 'attention_mask': att_tmp[:-1], 'label': label[1:]})
+                            input_data.append(text)
         except json.JSONDecodeError as e:
             print(f'\n[ERROR] JSONDecodeError 발생: {path}\n')
             error_files.append(path)
-
-    test_data = input_data[0]
-    for i in range(len(test_data['input_data'])):
-        print(test_data['input_data'][i])
-        print('\n')
-        print(test_data['label'][i])
-        print('\n')
-    print('QA test 출력입니다.\n')
-    dataset = Dataset.from_list(input_data)
-    return dataset
+    return input_data
 
 
 if __name__ == "__main__":

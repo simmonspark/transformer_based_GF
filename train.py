@@ -10,7 +10,7 @@ from tqdm import tqdm
 import torch.nn as nn
 from transformers import  T5ForConditionalGeneration
 
-IsComplie = False
+IsComplie = True
 mode = 'resume'  # scratch, resume, fine, fine_resume
 lr = 1e-4
 betas = (0.9, 0.95)
